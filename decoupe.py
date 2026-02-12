@@ -17,9 +17,13 @@ def decoupe(facettes, epaisseur):
     segments_h = []
     for facette in facettes :
         zmin, zmax = facette.zmin_et_zmax()
-        hauteur = zmin // epaisseur + 1
+        hauteur = 0
+        while hauteur < zmin :
+            hauteur += epaisseur
         while hauteur <= zmax :
-            segments_h.append([facette.intersection_plan_horizontal(hauteur), hauteur])
+            segment = facette.intersection_plan_horizontal(hauteur)
+            if segment != () :
+                segments_h.append([segment, hauteur])
             hauteur += epaisseur
 
     if segments_h == [] :
@@ -37,14 +41,10 @@ def decoupe(facettes, epaisseur):
     # Ramassage des segments de meme hauteur
     tranches = [[segments_h[0][0]]]
     for i in range(1, len(segments_h)) :
-        if segments_h[i][0] != () :
-            if segments_h[i][1] == segments_h[i - 1][1] :
-                tranches[len(tranches) - 1].append(segments_h[i][0])
-            else :
-                tranches.append([segments_h[i][0]])
-            
-    if segments_h[0][0] == () : 
-        tranches[0].pop(0)
+        if segments_h[i][1] == segments_h[i - 1][1] :
+            tranches[len(tranches) - 1].append(segments_h[i][0])
+        else :
+            tranches.append([segments_h[i][0]])
 
     return tranches
 
