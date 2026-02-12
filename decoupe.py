@@ -12,8 +12,41 @@ def decoupe(facettes, epaisseur):
     le vecteur externe contient toutes les coupes de tranches de la plus basse (x minimal)
     a la plus haute (x maximal).
     """
-    pass
 
+    # Collection de tous les segments, chacun avec sa heuteur
+    segments_h = []
+    for facette in facettes :
+        zmin, zmax = facette.zmin_et_zmax()
+        hauteur = zmin // epaisseur + 1
+        while hauteur <= zmax :
+            segments_h.append([facette.intersection_plan_horizontal(hauteur), hauteur])
+            hauteur += epaisseur
+
+    if segments_h == [] :
+        return []
+
+    # Tris des segments selon leurs hauteurs
+    for i in range(len(segments_h) - 1) :
+        idx = i
+        for j in range(i + 1, len(segments_h)) :
+            if segments_h[j][1] < segments_h[idx][1] :
+                idx = j
+        if idx != i :
+            segments_h[i], segments_h[idx] = segments_h[idx], segments_h[i]
+    
+    # Ramassage des segments de meme hauteur
+    tranches = [[segments_h[0][0]]]
+    for i in range(1, len(segments_h)) :
+        if segments_h[i][0] != () :
+            if segments_h[i][1] == segments_h[i - 1][1] :
+                tranches[len(tranches) - 1].append(segments_h[i][0])
+            else :
+                tranches.append([segments_h[i][0]])
+            
+    if segments_h[0][0] == () : 
+        tranches[0].pop(0)
+
+    return tranches
 
 def main():
     if len(argv) != 3:
