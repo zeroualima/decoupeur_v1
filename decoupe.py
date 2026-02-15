@@ -13,40 +13,26 @@ def decoupe(facettes, epaisseur):
     a la plus haute (x maximal).
     """
 
-    # Collection de tous les segments, chacun avec sa heuteur
-    segments_h = []
-    for facette in facettes :
-        zmin, zmax = facette.zmin_et_zmax()
-        hauteur = 0
-        while hauteur < zmin :
-            hauteur += epaisseur
-        while hauteur <= zmax :
+    altitudes = [facette.zmin_et_zmax() for facette in facettes]
+    zmin = min([altitude[0] for altitude in altitudes])
+    zmax = max([altitude[1] for altitude in altitudes])
+
+    hauteur = zmin
+    # while hauteur < zmin :
+    #     hauteur += epaisseur
+
+    tranches = []
+    while hauteur <= zmax :
+        tranche = []
+        for facette in facettes :
             segment = facette.intersection_plan_horizontal(hauteur)
             if segment != () :
-                segments_h.append([segment, hauteur])
-            hauteur += epaisseur
-
-    if segments_h == [] :
-        return []
-
-    # Tris des segments selon leurs hauteurs
-    for i in range(len(segments_h) - 1) :
-        idx = i
-        for j in range(i + 1, len(segments_h)) :
-            if segments_h[j][1] < segments_h[idx][1] :
-                idx = j
-        if idx != i :
-            segments_h[i], segments_h[idx] = segments_h[idx], segments_h[i]
-    
-    # Ramassage des segments de meme hauteur
-    tranches = [[segments_h[0][0]]]
-    for i in range(1, len(segments_h)) :
-        if segments_h[i][1] == segments_h[i - 1][1] :
-            tranches[len(tranches) - 1].append(segments_h[i][0])
-        else :
-            tranches.append([segments_h[i][0]])
+                tranche.append(segment)
+        tranches.append(tranche)
+        hauteur += epaisseur
 
     return tranches
+
 
 def main():
     if len(argv) != 3:
