@@ -17,9 +17,9 @@ def decoupe(facettes, epaisseur):
     zmin = min([altitude[0] for altitude in altitudes])
     zmax = max([altitude[1] for altitude in altitudes])
 
-    hauteur = zmin
-    # while hauteur < zmin :
-    #     hauteur += epaisseur
+    hauteur = 0
+    while hauteur < zmin :
+        hauteur += epaisseur
 
     tranches = []
     while hauteur <= zmax :
