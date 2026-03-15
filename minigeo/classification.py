@@ -12,18 +12,15 @@ class Noeud:
         """
         creation d'un fichier dot, conversion en png et affichage dans kitty
         """
-        polygones = []
         with open("./dot/arbre.dot", "w") as f:
             f.write("digraph g {\n")
             racines = self.enfants
             for racine in racines :
-                polygones.append(racine.contenu) #####
                 f.write(f"nPLAN -> n{id(racine)};\n")
             pile = racines
             while pile :
                 noeud = pile.pop()
                 for newNoeud in noeud.enfants :
-                    polygones.append(newNoeud.contenu) #####
                     f.write(f"n{id(noeud)} -> n{id(newNoeud)};\n")
                     pile.append(newNoeud)
             f.write("}\n")
@@ -34,8 +31,6 @@ class Noeud:
         s.render("./dot/arbre", cleanup=True)
         s = Source(texte_dot, format="svg")
         s.render("./dot/arbre", cleanup=True)
-
-        affiche(polygones.reverse())
 
 def arbre_inclusion(polygones):
     """

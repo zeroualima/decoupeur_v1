@@ -37,12 +37,12 @@ def decoupe(facettes, epaisseur):
 
 def traitement_tranche(segments):
     segments_dedoublonnes = suppression_doublons(segments)
-    affiche(segments_dedoublonnes)
+    affiche(segments_dedoublonnes) ### Pour afficher les segments apres supression de doublons
     polygones = construction_polygones(segments_dedoublonnes)
     print(f"on a {len(polygones)} polygones")
-    # affiche(polygones)
+    affiche(polygones) ### Pour creer les svg colores des polygones (l'un dans l'autre) dans ./pics
     hierarchie = arbre_inclusion(polygones)
-    hierarchie.affichage()
+    hierarchie.affichage() ### Pour creer l'arbre des polygones dans ./dot
 
 
 def main():
