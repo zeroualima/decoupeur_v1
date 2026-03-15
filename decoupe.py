@@ -40,7 +40,7 @@ def traitement_tranche(segments):
     affiche(segments_dedoublonnes)
     polygones = construction_polygones(segments_dedoublonnes)
     print(f"on a {len(polygones)} polygones")
-    affiche(polygones)
+    # affiche(polygones)
     hierarchie = arbre_inclusion(polygones)
     hierarchie.affichage()
 
