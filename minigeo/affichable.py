@@ -90,7 +90,7 @@ def affiche(*affichables):
 
     xmin, xmax, ymin, ymax = dimensions
     global NUMERO_IMAGE
-    nom_image = f"img_{NUMERO_IMAGE}.svg"
+    nom_image = f"./pics/img_{NUMERO_IMAGE}.svg" # J'ai ajoute ./pics/ pour des raisons d'organisations
     with open(nom_image, "w") as svg:
         print(
             f"<svg width='800' height='600' viewBox='{xmin} {ymin} {xmax - xmin} {ymax - ymin}'>",
