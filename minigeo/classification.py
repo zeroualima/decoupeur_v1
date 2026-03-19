@@ -38,37 +38,29 @@ def arbre_inclusion(polygones):
     renvoie un arbre (le noeud racine etant le plan) indiquant qui est inclu dans qui.
     pre-condition: pas de doublons, pas d'intersections hors bordures.
     """
+    polygones_tries = sorted(polygones, key=lambda p: abs(p.surface()), reverse=True)
     racines = [] # elements de type Noeud
-    pile = polygones
-    while pile :
-        polygone = pile.pop()
+    for polygone in polygones_tries :
         pere = None
         for racine in racines :
-            if racine.contenu.contient(polygone) :
-                pere = racine
-                break # polygone ne peut avoir qu'un seul pere parmi les racines, grace a """pas d'intersections hors bordures"""
+            if abs(racine.contenu.surface()) >= abs(polygone.surface()):
+                if racine.contenu.contient(polygone) :
+                    pere = racine
+                    break # polygone ne peut avoir qu'un seul pere parmi les racines, grace a """pas d'intersections hors bordures"""
         if pere : # On determinera la place de polygone au sein des descendants de pere
             while pere.enfants :
-                pere_est_changer = False
+                pere_change = False
                 for enfant in pere.enfants :
-                    if enfant.contenu.contient(polygone) :
-                        pere = enfant
-                        pere_est_changer = True
-                        break
-                if not pere_est_changer :
+                    if abs(enfant.contenu.surface()) >= abs(polygone.surface()):
+                        if enfant.contenu.contient(polygone) :
+                            pere = enfant
+                            pere_change = True
+                            break
+                if not pere_change :
                     break
-            newNoeud = Noeud(polygone)
-            newNoeud.enfants = []
-            pere.enfants.append(newNoeud)
-        else : # On rassemble les enfants de polygone et on ajoute ce dernier a racines
-            newNoeud = Noeud(polygone)
-            enfants = []
-            for racine in racines[:]:
-                if polygone.contient(racine.contenu):
-                    racines.remove(racine)
-                    enfants.append(racine)
-            newNoeud.enfants = enfants
-            racines.append(newNoeud)
+            pere.enfants.append(Noeud(polygone))
+        else : # polygone ne possede pas de pere dans racines, en plus il est de surface inferieure a eux donc ne contient aucun d'eux, c'est a dire polygone est une nouvelle racine
+            racines.append(Noeud(polygone))
     arbre = Noeud("PLAN")
     arbre.enfants = racines
     return arbre

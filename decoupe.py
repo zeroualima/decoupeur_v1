@@ -61,6 +61,7 @@ def main():
     print("on a charge", len(facettes), "facettes")
 
     tranches = decoupe(facettes, epaisseur)
+    print(len(tranches))
 
     # for tranche in tranches:
     #     affiche(tranche)
