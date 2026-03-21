@@ -65,6 +65,7 @@ def arbre_inclusion(polygones):
     arbre.enfants = racines
     return arbre
 
+
 def main():
     p1 = Polygone.carre((0, 0), 10)
     p2 = Polygone.carre((0, 0), 8)
